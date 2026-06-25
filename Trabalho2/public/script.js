@@ -1,3 +1,4 @@
+console.log("script vb");
 const API = "";
 
 async function buscarFilmes() {
@@ -10,7 +11,7 @@ async function buscarFilmes() {
     div.innerHTML = "";
 
     if (!dados.Search) {
-        div.innerHTML = "<p>Nenhum filme encontrado.</p>";
+        div.innerHTML = "<p>Nenhum filme encontrado</p>";
         return;
     }
 
@@ -77,16 +78,25 @@ async function verMaisTarde(id) {
 
 async function darNota(id) {
 
-    const nota = prompt("Digite uma nota de 0 a 10:");
+    const entrada = prompt("Digite uma nota de 0 a 10 (decimais permitidos)");
+
+    if (entrada === null) return;
+
+    const nota = parseFloat(
+        entrada.replace(",", ".")
+    );
+
+    if (isNaN(nota) || nota < 0 || nota > 10) {
+        alert("Digite uma nota válida entre 0 e 10.");
+        return;
+    }
 
     await fetch(`/filmes/${id}/nota`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            nota
-        })
+        body: JSON.stringify({ nota })
     });
 
     carregarFilmes();
@@ -123,7 +133,12 @@ function exibirResultados(lista) {
 
         div.innerHTML += `
             <div class="card">
-                <img src="${poster}" alt="${titulo}">
+                <img
+              src="${poster}"
+              alt="${titulo}"
+             style="cursor:pointer"
+              onclick="abrirDesc('${imdbID}')"
+             >
 
                 <h3>${titulo}</h3>
 
@@ -185,17 +200,22 @@ function renderizarBiblioteca(filmes) {
     filmes.forEach(filme => {
         div.innerHTML += `
             <div class="card">
-                <img src="${filme.poster}" alt="">
+               <img
+             src="${filme.poster}"
+             alt="${filme.titulo}"
+             style="cursor:pointer"
+             onclick="abrirDesc('${filme.imdbID}')"
+>
 
                 <h3>${filme.titulo}</h3>
                 <p>${filme.ano}</p>
 
                 <p class="${filme.favorito ? 'favorito' : ''}">
-                    ${filme.favorito ? '⭐ Favorito' : ''}
+                    ${filme.favorito ? 'Favorito' : ''}
                 </p>
 
                 <p class="${filme.verMaisTarde ? 'verde' : ''}">
-                    ${filme.verMaisTarde ? '🎬 Ver Mais Tarde' : ''}
+                    ${filme.verMaisTarde ? 'Ver Mais Tarde' : ''}
                 </p>
 
                 <p>Nota: ${filme.nota}</p>
@@ -207,4 +227,8 @@ function renderizarBiblioteca(filmes) {
             </div>
         `;
     });
+}
+
+function abrirDesc(imdbID) {
+    window.location.href = `desc.html?id=${imdbID}`;
 }

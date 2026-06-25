@@ -1,3 +1,4 @@
+console.log("carregada v5");
 require("dotenv").config();
 
 const express = require("express");
@@ -9,23 +10,21 @@ const app = express();
 
 app.use(express.json());
 
-// Conexão com MongoDB
+//mongodb
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("Mongo conectado");
+    console.log("conectado");
 
     app.listen(3000, () => {
-      console.log("Servidor rodando na porta 3000");
+      console.log("rodando 3000");
     });
   })
   .catch((err) => {
-    console.error("Erro ao conectar ao MongoDB:", err);
+    console.error("Erro", err);
   });
 
 
-// ======================
-// BUSCAR FILMES NA OMDb
-// ======================
+//buscar
 app.get("/buscar/:nome", async (req, res) => {
   try {
     const resposta = await axios.get(
@@ -39,9 +38,7 @@ app.get("/buscar/:nome", async (req, res) => {
 });
 
 
-// ======================
-// LISTAR FILMES SALVOS
-// ======================
+//listar filmes
 app.get("/filmes", async (req, res) => {
   try {
     const filmes = await Filme.find();
@@ -52,9 +49,7 @@ app.get("/filmes", async (req, res) => {
 });
 
 
-// ======================
-// SALVAR FILME
-// ======================
+//salvar
 app.post("/filmes", async (req, res) => {
   try {
     const filme = await Filme.create(req.body);
@@ -65,64 +60,73 @@ app.post("/filmes", async (req, res) => {
 });
 
 
-// ======================
-// FAVORITAR FILME
-// ======================
+//favoritar
 app.put("/filmes/:id/favorito", async (req, res) => {
   try {
+    console.log("Favoritar:", req.params.id);
+
     const filme = await Filme.findById(req.params.id);
+    console.log("Filme encontrado:", filme);
 
     const atualizado = await Filme.findByIdAndUpdate(
       req.params.id,
       { favorito: !filme.favorito },
-      { new: true }
+      { returnDocument: "after" }
     );
+
+    console.log("Atualizado:", atualizado);
 
     res.json(atualizado);
   } catch (erro) {
+    console.error(erro);
     res.status(500).json({ erro: erro.message });
   }
 });
-// ======================
-// MARCAR PARA VER MAIS TARDE
-// ======================
+//vermt
 app.put("/filmes/:id/vermaistarde", async (req, res) => {
   try {
+    console.log("Ver mais tarde:", req.params.id);
+
     const filme = await Filme.findById(req.params.id);
+    console.log("Filme encontrado:", filme);
 
     const atualizado = await Filme.findByIdAndUpdate(
       req.params.id,
       { verMaisTarde: !filme.verMaisTarde },
-      { new: true }
+      { returnDocument: "after" }
     );
+
+    console.log("Atualizado:", atualizado);
 
     res.json(atualizado);
   } catch (erro) {
+    console.error(erro);
     res.status(500).json({ erro: erro.message });
   }
 });
 
-// ======================
-// DAR NOTA AO FILME
-// ======================
+//nota
 app.put("/filmes/:id/nota", async (req, res) => {
   try {
-    const filme = await Filme.findByIdAndUpdate(
+
+    const nota = Number(req.body.nota);
+
+    const filmeAtualizado = await Filme.findByIdAndUpdate(
       req.params.id,
-      { nota: req.body.nota },
-      { new: true }
+      { nota: nota },
+      { returnDocument: "after" }
     );
 
-    res.json(filme);
+    res.json(filmeAtualizado);
+
   } catch (erro) {
+    console.error(erro);
     res.status(500).json({ erro: erro.message });
   }
 });
 
 
-// ======================
-// REMOVER FILME
-// ======================
+//remover
 app.delete("/filmes/:id", async (req, res) => {
   try {
     await Filme.findByIdAndDelete(req.params.id);
@@ -136,3 +140,15 @@ app.delete("/filmes/:id", async (req, res) => {
 });
 app.use(express.static("public"));
 app.use(express.json());
+
+app.get("/filme/:id", async (req, res) => {
+  try {
+    const resposta = await axios.get(
+      `https://www.omdbapi.com/?apikey=${process.env.OMDB_KEY}&i=${req.params.id}&plot=full`
+    );
+
+    res.json(resposta.data);
+  } catch (erro) {
+    res.status(500).json({ erro: erro.message });
+  }
+});
