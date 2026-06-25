@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<header>
+    <h1>CineFinds</h1>
+
+    <nav>
+        <button onclick="mostrarInicio()">Início</button>
+        <button onclick="mostrarFavoritos()">Favoritos</button>
+        <button onclick="mostrarVerMaisTarde()">Ver Mais Tarde</button>
+    </nav>
+</header>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="busca">
+        <input type="text" id="nomeFilme" placeholder="Digite o nome do filme">
+        <button onclick="buscarFilmes()">Buscar</button>
+    </div>
+
+    <h2>Resultados da Busca</h2>
+    <div id="resultados"></div>
+
+    <h2>Meus Filmes</h2>
+    <div id="filmesSalvos"></div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

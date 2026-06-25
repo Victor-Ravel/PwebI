@@ -1,0 +1,97 @@
+header {
+    background: #6a0dad;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+nav {
+    text-align: center;
+    margin-top: 10px;
+}
+
+nav button {
+    background: white;
+    border: none;
+    margin: 5px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+body {
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: white;
+    margin: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(178, 102, 255, 0.8);
+}
+
+h2 {
+    text-align: center;
+}
+
+.busca {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+input {
+    padding: 10px;
+    width: 300px;
+}
+
+button {
+    padding: 10px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+#resultados,
+#filmesSalvos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.card {
+    background: #1e1e1e;
+    padding: 15px;
+    width: 220px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.favorito {
+    color: gold;
+    font-weight: bold;
+}
+
+.verde {
+    color: lightgreen;
+}
+.barra-topo {
+    width: 100%;
+    height: 12px;
+    background: linear-gradient(
+        90deg,
+        #6a0dad,
+        #8a2be2,
+        #9932cc,
+        #8a2be2,
+        #6a0dad
+    );
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.8);
+}
